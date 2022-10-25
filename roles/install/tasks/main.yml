@@ -1,0 +1,25 @@
+- name: Prometheus Installation (Ubuntu)
+  apt:
+    name:
+      - prometheus
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: Prometheus Pre-Requisites Installation (CentOS)
+  tags: CentOS
+  dnf:
+    name:
+      - epel-release
+      - snapd
+    state: latest
+  when: ansible_distribution == "CentOS"
+
+- name: Enable Sockets (CentOS)
+  command: systemctl enable --now snapd.socket
+  when: ansible_distribution == "CentOS"
+
+- name: Installation of Prometheus (CentOS)
+  command: snap install prometheus
+  when: ansible_distribution == "CentOS"
+
